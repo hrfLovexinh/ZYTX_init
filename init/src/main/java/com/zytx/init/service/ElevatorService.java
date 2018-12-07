@@ -34,10 +34,14 @@ public class ElevatorService {
     public void updateCoordinate() {
         /*//将百度返回字段设为null
         elevatorMapper.setPreciseIsNull();*/
-        long count = elevatorMapper.updateCoordinateCount();
+        //long count = elevatorMapper.updateCoordinateCount();
         List<ElevatorInfo> items = null;
-        for(int i = 1; i <= Math.floor(count/500) + 1; i ++) {
+        //for(int i = 1; i <= Math.floor(count/500) + 1; i ++) {
+        while(true) {
             items = elevatorMapper.updateCoordinate(0,500);
+            if(items == null || items.size() == 0) {
+                break;
+            }
             for (ElevatorInfo item : items) {
                 getCoordinateBybd(item);
             }
@@ -77,12 +81,16 @@ public class ElevatorService {
     }
 
     public void confirmCoordinateByAll() {
-        long count = elevatorMapper.confirmCoordinateByAllCount(1);
+        //long count = elevatorMapper.confirmCoordinateByAllCount(1);
         //System.out.println(count);
         List<ElevatorCoordinate> items = null;
-        for(int i = 1; i <= Math.floor(count/500) + 1; i ++) {
+        //for(int i = 1; i <= Math.floor(count/500) + 1; i ++) {
+        while(true) {
             //查询出三个坐标误差都小于200m的电梯数据
             items = elevatorMapper.confirmCoordinateByAll(0,500,1);
+            if(items == null || items.size() == 0) {
+                break;
+            }
             for (ElevatorCoordinate item : items) {
                 //三个坐标误差都小于200m的以96933坐标为准
                 elevatorMapper.updateConfirmCoordinate(item.getPmap_X(),item.getPmap_Y(),1,item.getId());
@@ -91,11 +99,15 @@ public class ElevatorService {
     }
 
     public void confirmCoordinateBypddistance() {
-        long count = elevatorMapper.confirmCoordinateByAllCount(2);
+        //long count = elevatorMapper.confirmCoordinateByAllCount(2);
         List<ElevatorCoordinate> items = null;
-        for(int i = 1; i <= Math.floor(count/500) + 1; i ++) {
+        //for(int i = 1; i <= Math.floor(count/500) + 1; i ++) {
+        while(true) {
             //查询出96933坐标与粘贴库坐标误差小于250m的电梯
             items = elevatorMapper.confirmCoordinateByAll(0,500,2);
+            if(items == null || items.size() == 0) {
+                break;
+            }
             for (ElevatorCoordinate item : items) {
                 //96933坐标与粘贴库坐标误差小于250m的以96933坐标为准
                 elevatorMapper.updateConfirmCoordinate(item.getPmap_X(),item.getPmap_Y(),2,item.getId());
@@ -104,11 +116,15 @@ public class ElevatorService {
     }
 
     public void confirmCoordinateByepdistance() {
-        long count = elevatorMapper.confirmCoordinateByAllCount(3);
+        //long count = elevatorMapper.confirmCoordinateByAllCount(3);
         List<ElevatorCoordinate> items = null;
-        for(int i = 1; i <= Math.floor(count/500) + 1; i ++) {
+        //for(int i = 1; i <= Math.floor(count/500) + 1; i ++) {
+        while(true) {
             //查询出96933坐标与电梯库坐标误差小于250m的电梯
             items = elevatorMapper.confirmCoordinateByAll(0,500,3);
+            if(items == null || items.size() == 0) {
+                break;
+            }
             for (ElevatorCoordinate item : items) {
                 //96933坐标与电梯库坐标误差小于250m的以96933坐标为准
                 elevatorMapper.updateConfirmCoordinate(item.getPmap_X(),item.getPmap_Y(),3,item.getId());
@@ -117,11 +133,15 @@ public class ElevatorService {
     }
 
     public void confirmCoordinateByeddistance() {
-        long count = elevatorMapper.confirmCoordinateByAllCount(4);
+        //long count = elevatorMapper.confirmCoordinateByAllCount(4);
         List<ElevatorCoordinate> items = null;
-        for(int i = 1; i <= Math.floor(count/500) + 1; i ++) {
+        //for(int i = 1; i <= Math.floor(count/500) + 1; i ++) {
+        while(true) {
             //查询出电梯库坐标与粘贴库坐标误差小于500m的电梯
             items = elevatorMapper.confirmCoordinateByAll(0,500,4);
+            if(items == null || items.size() == 0) {
+                break;
+            }
             for (ElevatorCoordinate item : items) {
                 //电梯库坐标与粘贴库坐标误差小于500m的以粘贴库坐标为准
                 elevatorMapper.updateConfirmCoordinate(item.getDmap_X(),item.getDmap_Y(),4,item.getId());
@@ -130,11 +150,15 @@ public class ElevatorService {
     }
 
     public void confirmCoordinateByepdistance1() {
-        long count = elevatorMapper.confirmCoordinateByAllCount(5);
+        //long count = elevatorMapper.confirmCoordinateByAllCount(5);
         List<ElevatorCoordinate> items = null;
-        for(int i = 1; i <= Math.floor(count/500) + 1; i ++) {
+        //for(int i = 1; i <= Math.floor(count/500) + 1; i ++) {
+        while(true) {
             //查询出96933坐标与电梯库坐标误差小于1000m的电梯
             items = elevatorMapper.confirmCoordinateByAll(0,500,5);
+            if(items == null || items.size() == 0) {
+                break;
+            }
             for (ElevatorCoordinate item : items) {
                 //96933坐标与电梯库坐标误差小于1000m的以96933坐标为准
                 elevatorMapper.updateConfirmCoordinate(item.getPmap_X(),item.getPmap_Y(),5,item.getId());
@@ -143,11 +167,15 @@ public class ElevatorService {
     }
 
     public void confirmCoordinateByeddistance1() {
-        long count = elevatorMapper.confirmCoordinateByAllCount(6);
+        //long count = elevatorMapper.confirmCoordinateByAllCount(6);
         List<ElevatorCoordinate> items = null;
-        for(int i = 1; i <= Math.floor(count/500) + 1; i ++) {
+        //for(int i = 1; i <= Math.floor(count/500) + 1; i ++) {
+        while(true) {
             //查询出电梯库坐标与粘贴库坐标误差小于1000m的电梯
             items = elevatorMapper.confirmCoordinateByAll(0,500,6);
+            if(items == null || items.size() == 0) {
+                break;
+            }
             for (ElevatorCoordinate item : items) {
                 //电梯库坐标与粘贴库坐标误差小于1000m的以粘贴库坐标为准
                 elevatorMapper.updateConfirmCoordinate(item.getDmap_X(),item.getDmap_Y(),6,item.getId());
@@ -156,10 +184,14 @@ public class ElevatorService {
     }
 
     public void confirmCoordinateBybd() {
-        long count = elevatorMapper.confirmCoordinateBybdCount();
+        //long count = elevatorMapper.confirmCoordinateBybdCount();
         List<ElevatorInfo> items = null;
-        for(int i = 1; i <= Math.floor(count/500) + 1; i ++) {
+        //for(int i = 1; i <= Math.floor(count/500) + 1; i ++) {
+        while(true) {
             items = elevatorMapper.confirmCoordinateBybd(0,500);
+            if(items == null || items.size() == 0) {
+                break;
+            }
             for (ElevatorInfo item : items) {
                 //if(parseAddressByCoordinate(item.getMap_X(),item.getMap_Y())) {
                     elevatorMapper.updateConfirmCoordinateBybd(7,item.getId());
@@ -239,10 +271,14 @@ public class ElevatorService {
     }
 
     public void updateCoordinateNoRewrite() {
-        long count = elevatorMapper.updateCoordinateNoRewriteCount();
+        //long count = elevatorMapper.updateCoordinateNoRewriteCount();
         List<ElevatorInfo> items = null;
-        for(int i = 1; i <= Math.floor(count/500) + 1; i ++) {
+        //for(int i = 1; i <= Math.floor(count/500) + 1; i ++) {
+        while(true) {
             items = elevatorMapper.updateCoordinateNoRewrite(0,500);
+            if(items == null || items.size() == 0) {
+                break;
+            }
             for (ElevatorInfo item : items) {
                 getCoordinateBybd(item);
             }
