@@ -237,4 +237,15 @@ public class ElevatorService {
         //将百度返回字段设为null
         elevatorMapper.setPreciseIsNull();
     }
+
+    public void updateCoordinateNoRewrite() {
+        long count = elevatorMapper.updateCoordinateNoRewriteCount();
+        List<ElevatorInfo> items = null;
+        for(int i = 1; i <= Math.floor(count/500) + 1; i ++) {
+            items = elevatorMapper.updateCoordinateNoRewrite(0,500);
+            for (ElevatorInfo item : items) {
+                getCoordinateBybd(item);
+            }
+        }
+    }
 }

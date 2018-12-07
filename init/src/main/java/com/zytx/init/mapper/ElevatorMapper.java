@@ -40,4 +40,8 @@ public interface ElevatorMapper {
     List<ElevatorInfo> cheeckCoordinate(@Param("start") int start,@Param("end") int end,@Param("sign") int sign);
 
     void cheeckCoordinateUpdate(@Param("id") int id,@Param("sign") int sign);
+
+    long updateCoordinateNoRewriteCount();
+
+    List<ElevatorInfo> updateCoordinateNoRewrite(@Param("start") int start,@Param("end") int end);
 }

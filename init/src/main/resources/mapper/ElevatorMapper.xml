@@ -178,4 +178,12 @@
         set map_X='0.000000',map_Y='0.000000' where id=#{id}
     </update>
 
+    <select id="updateCoordinateNoRewriteCount" resultType="long">
+        select count(*) from TwoCodeElevatorInfo where (LEFT(map_X,1)='0' or LEFT(map_Y,1)='0' or isnull(map_X,'')='' or isnull(map_Y,'')='') and precise is null
+    </select>
+
+    <select id="updateCoordinateNoRewrite" resultType="elevatorInfo">
+        select * from( select ROW_NUMBER() over(order by ID)TT,Tb.* FROM (select id,precise,address from TwoCodeElevatorInfo where (LEFT(map_X,1)='0' or LEFT(map_Y,1)='0' or isnull(map_X,'')='' or isnull(map_Y,'')='') and precise is null) Tb)TTT WHERE TTT.TT between #{start} and #{end}
+    </select>
+
 </mapper>

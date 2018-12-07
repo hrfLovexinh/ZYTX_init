@@ -160,4 +160,16 @@ public class ElevatorController {
 
     }
 
+    //对坐标无效的电梯生成坐标
+    @RequestMapping("/elevator/updateCoordinateNoRewrite")
+    public String updateCoordinateNoRewrite() {
+        try {
+            elevatorService.updateCoordinateNoRewrite();
+            return "更新成功";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "可能在更新过程中出现问题,请与管理员联系检查问题!";
+        }
+    }
+
 }
