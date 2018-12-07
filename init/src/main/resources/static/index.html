@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>电梯安全公共服务平台</title>
+ <link rel="stylesheet" type="text/css" href="css/easyuibootstrap.css">
+<!--  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/easyui.css"/> -->
+<link rel="stylesheet" type="text/css" href="css/icon.css"/>
+<link rel="stylesheet" type="text/css" href="css/demo.css">
+<script type="text/javascript" src="scripts/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="scripts/jquery.easyui.min.js"></script>
+</head>
+ <body class="easyui-layout" style="text-align:center">
+    <div region="north" style="background:#fafafa;color:#2d5593;height:100px;">
+    <div style="height:78px;float:right;both:clear;width:100%;background-color: silver;background-repeat: no-repeat;background-positon: 100%, 100%; position:relative;">
+    <img src="images/headbg.png" style="width:100%;height:100%"/>
+    </div>
+  
+   </div> 
+      
+    <div region="center">
+        <div id="main-center" class="easyui-tabs" fit="true" border="false">
+           <div title="电梯坐标定位" style="overflow:auto;width:100px;height: 50px">
+
+
+               <iframe id="iframeId" scrolling="no" frameborder="0"  src="/init/systemCoordinateConfirm.html" style="width:100%;height:100%;"></iframe>
+           </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- mapper 为根元素节点， 一个namespace对应一个dao -->
+<mapper namespace="com.zytx.init.mapper.ElevatorMapper">
+
+    <update id="setPreciseIsNull">
+        update TwoCodeElevatorInfo set precise=null,dealCoordinate=0
+    </update>
+
+    <select id="updateCoordinate" resultType="elevatorInfo">
+        select id,address from( select ROW_NUMBER() over(order by ID)TT,T.* FROM (select id,precise,address from TwoCodeElevatorInfo where precise is null) T)TTT WHERE TTT.TT between #{start} and #{end}
+    </select>
+
+    <select id="updateCoordinateCount" resultType="long">
+        select count(*) from TwoCodeElevatorInfo where precise is null
+    </select>
+
+    <update id="updateCoordinateInsert" >
+        update TwoCodeElevatorInfo set map_X=#{map_X},map_Y=#{map_Y},precise=#{precise} where id=#{id}
+    </update>
+
+    <select id="confirmCoordinateByAllCount" resultType="long">
+        select count(*)
+         from (select e.dealCoordinate,e.id,e.registNumber,e.address,e.registCode,
+         case when LEFT(e.map_X,1)='0' then '' else e.map_X end as emap_X,
+         case when LEFT(e.map_Y,1)='0' then '' else e.map_Y end as emap_Y,
+         case when LEFT(d.map_X,1)='0' then '' else d.map_X end as dmap_X,
+         case when LEFT(d.map_Y,1)='0' then '' else d.map_Y end as dmap_Y,
+         case when LEFT(p.map_X,1)='0' then '' else p.map_X end as pmap_X,
+         case when LEFT(p.map_Y,1)='0' then '' else p.map_Y end as pmap_Y,
+         case when LEFT(d.map_X,1)='0' or LEFT(d.map_Y,1)='0' or LEFT(e.map_X,1)='0' or LEFT(e.map_Y,1)='0' or d.map_X='' or d.map_Y='' or e.map_X='' or e.map_Y='' then null else ACOS(SIN((d.map_Y * PI()) / 180) * SIN((e.map_Y * PI()) / 180) + COS((d.map_Y * PI()) / 180) * COS((e.map_Y * PI()) / 180) * COS((d.map_X * PI()) / 180 - (e.map_X * PI()) / 180)) * 6378.137*1000 end as eddistance,
+         case when LEFT(p.map_X,1)='0' or LEFT(p.map_Y,1)='0' or LEFT(e.map_X,1)='0' or LEFT(e.map_Y,1)='0' or p.map_X='' or p.map_Y='' or e.map_X='' or e.map_Y='' then null else ACOS(SIN((e.map_Y * PI()) / 180) * SIN((p.map_Y * PI()) / 180) + COS((e.map_Y * PI()) / 180) * COS((p.map_Y * PI()) / 180) * COS((e.map_X * PI()) / 180 - (p.map_X * PI()) / 180)) * 6378.137*1000 end as epdistance,
+         case when LEFT(p.map_X,1)='0' or LEFT(p.map_Y,1)='0' or LEFT(d.map_X,1)='0' or LEFT(d.map_Y,1)='0' or p.map_X='' or p.map_Y='' or d.map_X='' or d.map_Y='' then null else ACOS(SIN((d.map_Y * PI()) / 180) * SIN((p.map_Y * PI()) / 180) + COS((d.map_Y * PI()) / 180) * COS((p.map_Y * PI()) / 180) * COS((d.map_X * PI()) / 180 - (p.map_X * PI()) / 180)) * 6378.137*1000 end as dpdistance
+         from TwoCodeElevatorInfo e left join TwoCodeDdElevatorInfo d on e.registNumber=d.registNumber left join Twocode96333pdetailInfo p on d.registNumber=p.registNumber) t 
+         where 
+         <if test="sign == 1" >
+             t.eddistance &lt;= 200 and t.epdistance &lt;= 200 and t.dpdistance &lt;= 200 and (dealCoordinate=0 or dealCoordinate is null)
+         </if>
+         <if test="sign == 2">
+             t.dpdistance &lt;= 250 and (dealCoordinate=0 or dealCoordinate is null)
+         </if>
+        <if test="sign == 3">
+            t.epdistance &lt;= 250 and (dealCoordinate=0 or dealCoordinate is null)
+        </if>
+        <if test="sign == 4">
+            t.eddistance &lt;= 500 and (dealCoordinate=0 or dealCoordinate is null)
+        </if>
+        <if test="sign == 5">
+            t.epdistance &lt;= 1000 and (dealCoordinate=0 or dealCoordinate is null)
+        </if>
+        <if test="sign == 6">
+            t.eddistance &lt;= 1000 and (dealCoordinate=0 or dealCoordinate is null)
+        </if>
+        <if test="sign == 7">
+            dealCoordinate=7
+        </if>
+        <if test="sign == 9">
+            dealCoordinate=0 or dealCoordinate is null
+        </if>
+
+    </select>
+
+    <select id="confirmCoordinateByAll" resultType="elevatorCoordinate">
+        select * from( select ROW_NUMBER() over(order by ID)TT,Tb.* FROM (select id,isnull(registNumber,'') as registNumber,isnull(address,'') as address,isnull(registCode,'') as registCode,isnull(emap_X,'') as emap_X,isnull(emap_Y,'') as emap_Y,isnull(dmap_X,'') as dmap_X,isnull(dmap_Y,'') as dmap_Y,isnull(pmap_X,'') as pmap_X,isnull(pmap_Y,'') as pmap_Y,eddistance,epdistance,dpdistance
+        from (select e.dealCoordinate,e.id,e.registNumber,e.address,e.registCode,
+        case when LEFT(e.map_X,1)='0' then '' else e.map_X end as emap_X,
+        case when LEFT(e.map_Y,1)='0' then '' else e.map_Y end as emap_Y,
+        case when LEFT(d.map_X,1)='0' then '' else d.map_X end as dmap_X,
+        case when LEFT(d.map_Y,1)='0' then '' else d.map_Y end as dmap_Y,
+        case when LEFT(p.map_X,1)='0' then '' else p.map_X end as pmap_X,
+        case when LEFT(p.map_Y,1)='0' then '' else p.map_Y end as pmap_Y,
+        case when LEFT(d.map_X,1)='0' or LEFT(d.map_Y,1)='0' or LEFT(e.map_X,1)='0' or LEFT(e.map_Y,1)='0' or d.map_X='' or d.map_Y='' or e.map_X='' or e.map_Y='' then null else ACOS(SIN((d.map_Y * PI()) / 180) * SIN((e.map_Y * PI()) / 180) + COS((d.map_Y * PI()) / 180) * COS((e.map_Y * PI()) / 180) * COS((d.map_X * PI()) / 180 - (e.map_X * PI()) / 180)) * 6378.137*1000 end as eddistance,
+        case when LEFT(p.map_X,1)='0' or LEFT(p.map_Y,1)='0' or LEFT(e.map_X,1)='0' or LEFT(e.map_Y,1)='0' or p.map_X='' or p.map_Y='' or e.map_X='' or e.map_Y='' then null else ACOS(SIN((e.map_Y * PI()) / 180) * SIN((p.map_Y * PI()) / 180) + COS((e.map_Y * PI()) / 180) * COS((p.map_Y * PI()) / 180) * COS((e.map_X * PI()) / 180 - (p.map_X * PI()) / 180)) * 6378.137*1000 end as epdistance,
+        case when LEFT(p.map_X,1)='0' or LEFT(p.map_Y,1)='0' or LEFT(d.map_X,1)='0' or LEFT(d.map_Y,1)='0' or p.map_X='' or p.map_Y='' or d.map_X='' or d.map_Y='' then null else ACOS(SIN((d.map_Y * PI()) / 180) * SIN((p.map_Y * PI()) / 180) + COS((d.map_Y * PI()) / 180) * COS((p.map_Y * PI()) / 180) * COS((d.map_X * PI()) / 180 - (p.map_X * PI()) / 180)) * 6378.137*1000 end as dpdistance
+        from TwoCodeElevatorInfo e left join TwoCodeDdElevatorInfo d on e.registNumber=d.registNumber left join Twocode96333pdetailInfo p on d.registNumber=p.registNumber) t
+        where
+        <if test="sign == 1">
+            t.eddistance &lt;= 200 and t.epdistance &lt;= 200 and t.dpdistance &lt;= 200 and (dealCoordinate=0 or dealCoordinate is null)
+        </if>
+        <if test="sign == 2">
+            t.dpdistance &lt;= 250 and (dealCoordinate=0 or dealCoordinate is null)
+        </if>
+        <if test="sign == 3">
+            t.epdistance &lt;= 250 and (dealCoordinate=0 or dealCoordinate is null)
+        </if>
+        <if test="sign == 4">
+            t.eddistance &lt;= 500 and (dealCoordinate=0 or dealCoordinate is null)
+        </if>
+        <if test="sign == 5">
+            t.epdistance &lt;= 1000 and (dealCoordinate=0 or dealCoordinate is null)
+        </if>
+        <if test="sign == 6">
+            t.eddistance &lt;= 1000 and (dealCoordinate=0 or dealCoordinate is null)
+        </if>
+        <if test="sign == 7">
+            dealCoordinate=7
+        </if>
+        <if test="sign == 9">
+            dealCoordinate=0 or dealCoordinate is null
+        </if>
+          ) Tb)TTT WHERE TTT.TT between #{start} and #{end}
+    </select>
+
+    <update id="updateConfirmCoordinate">
+        update TwoCodeElevatorInfo set map_X=#{map_X},map_Y=#{map_Y},dealCoordinate=#{dealCoordinate} where id=#{id}
+    </update>
+
+    <select id="confirmCoordinateBybdCount" resultType="long">
+        select count(*) from TwoCodeElevatorInfo where (dealCoordinate=0 or dealCoordinate is null) and LEFT(map_X,1)!='0' and LEFT(map_Y,1)!='0' and precise is not null
+    </select>
+
+    <select id="confirmCoordinateBybd" resultType="elevatorInfo">
+        select * from( select ROW_NUMBER() over(order by ID)TT,Tb.* FROM (select id,map_X,map_Y from TwoCodeElevatorInfo where (dealCoordinate=0 or dealCoordinate is null) and LEFT(map_X,1)!='0' and LEFT(map_Y,1)!='0'and precise is not null) Tb)TTT WHERE TTT.TT between #{start} and #{end}
+    </select>
+
+    <update id="updateConfirmCoordinateBybd">
+        update TwoCodeElevatorInfo set dealCoordinate=#{dealCoordinate} where id=#{id}
+    </update>
+
+    <update id="personConfirmCoordinate">
+        update
+        <if test="sign==1">
+            TwoCodeElevatorInfo
+        </if>
+        <if test="sign==2">
+            TwoCodeDdElevatorInfo
+        </if>
+        <if test="sign==3">
+            Twocode96333pdetailInfo
+        </if>
+        set map_X=#{map_X},map_Y=#{map_Y}
+        <if test="sign==1">
+            ,dealCoordinate=#{dealCoordinate}
+        </if>
+         where registNumber=#{registNumber}
+    </update>
+
+    <select id="cheeckCoordinateCount" resultType="long">
+        select count(*) from
+        <if test="sign == 0">
+            TwoCodeElevatorInfo
+        </if>
+        <if test="sign == 1">
+            TwoCodeDdElevatorInfo
+        </if>
+        <if test="sign == 2">
+            Twocode96333pdetailInfo
+        </if>
+    </select>
+
+    <select id="cheeckCoordinate" resultType="elevatorInfo">
+        select * from( select ROW_NUMBER() over(order by ID)TT,Tb.id,Tb.map_X,Tb.map_Y FROM
+        <if test="sign == 0">
+            TwoCodeElevatorInfo
+        </if>
+        <if test="sign == 1">
+            TwoCodeDdElevatorInfo
+        </if>
+        <if test="sign == 2">
+            Twocode96333pdetailInfo
+        </if>
+         Tb)TTT WHERE TTT.TT between #{start} and #{end}
+    </select>
+
+    <update id="cheeckCoordinateUpdate">
+        update
+        <if test="sign == 0">
+            TwoCodeElevatorInfo
+        </if>
+        <if test="sign == 1">
+            TwoCodeDdElevatorInfo
+        </if>
+        <if test="sign == 2">
+            Twocode96333pdetailInfo
+        </if>
+        set map_X='0.000000',map_Y='0.000000' where id=#{id}
+    </update>
+
+</mapper>

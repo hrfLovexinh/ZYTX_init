@@ -1,0 +1,270 @@
+<html>
+<head>
+    <title>电梯安全公共服务平台</title>
+    <!--  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/easyui.css"/> -->
+    <link rel="stylesheet" type="text/css" href="css/easyuibootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/icon.css"/>
+    <link rel="stylesheet" type="text/css" href="css/demo.css">
+    <script type="text/javascript" src="scripts/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="scripts/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=6Kx0GQ8wm05QPnrnpoy9IvfLmDxNMxc0"></script>
+    <link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css">
+    <style>
+        .btn-with{
+            width: 360px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            margin: 15px 5px 0 5px;
+
+        }
+        .btn-with1{
+            width: 550px;
+            height: 30px;
+            text-align: center;
+            margin: 15px 5px 0 5px;
+        }
+        .btn-with .l-btn-text{
+            font-size: 16px!important;
+        }
+        .btn-with1 .l-btn-text{
+            font-size: 16px!important;
+        }
+        .input-div input{
+            font-size: 18px!important;
+        }
+        .btn-with:not(:first-child){
+            opacity: 0;
+            z-index: -10;
+            position: relative;
+
+        }
+        .btn{width:140px;height:36px;line-height:18px;font-size:18px;
+            background:cornflowerblue no-repeat left top;color:#FFF;padding-bottom:4px}
+    </style>
+    <script>
+        function init() {
+            $.post("/init/elevator/initCoordinate",function(data){
+                $.messager.alert("信息",data,"info");
+            });
+        }
+        function updateCoordinate() {
+            $.messager.progress({
+                text:'loading...'
+            });
+            $.messager.show({
+                title:'提示信息',
+                timeout:2000,
+                msg:'此操作可能执行时间较长,请耐心等待,谢谢。'
+            });
+            $.post("/init/elevator/updateCoordinate",function(data){
+                $.messager.progress('close');
+                $.messager.alert("信息",data,"info");
+                $(".btn-with:nth-child(2)").css({"opacity":"1","z-index":"1"});
+            });
+        }
+        function checkCoordinate0() {
+            $.messager.progress({
+                text:'loading...'
+            });
+            $.messager.show({
+                title:'提示信息',
+                timeout:2000,
+                msg:'此操作可能执行时间较长,请耐心等待,谢谢。'
+            });
+            $.post("/init/elevator/cheeckCoordinate",{sign:0},function(data){
+                $.messager.progress('close');
+                $.messager.alert("信息",data,"info");
+                $(".btn-with:nth-child(3)").css({"opacity":"1","z-index":"1"});
+            });
+        }
+        function checkCoordinate1() {
+            $.messager.progress({
+                text:'loading...'
+            });
+            $.messager.show({
+                title:'提示信息',
+                timeout:2000,
+                msg:'此操作可能执行时间较长,请耐心等待,谢谢。'
+            });
+            $.post("/init/elevator/cheeckCoordinate",{sign:1},function(data){
+                $.messager.progress('close');
+                $.messager.alert("信息",data,"info");
+                $(".btn-with:nth-child(4)").css({"opacity":"1","z-index":"1"});
+            });
+        }
+        function checkCoordinate2() {
+            $.messager.progress({
+                text:'loading...'
+            });
+            $.messager.show({
+                title:'提示信息',
+                timeout:2000,
+                msg:'此操作可能执行时间较长,请耐心等待,谢谢。'
+            });
+            $.post("/init/elevator/cheeckCoordinate",{sign:2},function(data){
+                $.messager.progress('close');
+                $.messager.alert("信息",data,"info");
+                $(".btn-with:nth-child(5)").css({"opacity":"1","z-index":"1"});
+            });
+        }
+        function confirmCoordinateByAll() {
+            $.messager.progress({
+                text:'loading...'
+            });
+            $.messager.show({
+                title:'提示信息',
+                timeout:2000,
+                msg:'此操作可能执行时间较长,请耐心等待,谢谢。'
+            });
+            $.post("/init/elevator/confirmCoordinateByAll",function(data){
+                $.messager.progress('close');
+                $.messager.alert("信息",data,"info");
+                $(".btn-with:nth-child(6)").css({"opacity":"1","z-index":"1"});
+            });
+        }
+        function confirmCoordinateBypddistance() {
+            $.messager.progress({
+                text:'loading...'
+            });
+            $.messager.show({
+                title:'提示信息',
+                timeout:2000,
+                msg:'此操作可能执行时间较长,请耐心等待,谢谢。'
+            });
+            $.post("/init/elevator/confirmCoordinateBypddistance",function(data){
+                $.messager.progress('close');
+                $.messager.alert("信息",data,"info");
+                $(".btn-with:nth-child(7)").css({"opacity":"1","z-index":"1"});
+            });
+        }
+        function confirmCoordinateByepdistance() {
+            $.messager.progress({
+                text:'loading...'
+            });
+            $.messager.show({
+                title:'提示信息',
+                timeout:2000,
+                msg:'此操作可能执行时间较长,请耐心等待,谢谢。'
+            });
+            $.post("/init/elevator/confirmCoordinateByepdistance",function(data){
+                $.messager.progress('close');
+                $.messager.alert("信息",data,"info");
+                $(".btn-with:nth-child(8)").css({"opacity":"1","z-index":"1"});
+            });
+        }
+        function confirmCoordinateByeddistance() {
+            $.messager.progress({
+                text:'loading...'
+            });
+            $.messager.show({
+                title:'提示信息',
+                timeout:2000,
+                msg:'此操作可能执行时间较长,请耐心等待,谢谢。'
+            });
+            $.post("/init/elevator/confirmCoordinateByeddistance",function(data){
+                $.messager.progress('close');
+                $.messager.alert("信息",data,"info");
+                $(".btn-with:nth-child(9)").css({"opacity":"1","z-index":"1"});
+            });
+        }
+        function confirmCoordinateByepdistance1() {
+            $.messager.progress({
+                text:'loading...'
+            });
+            $.messager.show({
+                title:'提示信息',
+                timeout:2000,
+                msg:'此操作可能执行时间较长,请耐心等待,谢谢。'
+            });
+            $.post("/init/elevator/confirmCoordinateByepdistance1",function(data){
+                $.messager.progress('close');
+                $.messager.alert("信息",data,"info");
+                $(".btn-with:nth-child(10)").css({"opacity":"1","z-index":"1"});
+            });
+        }
+        function confirmCoordinateByeddistance1() {
+            $.messager.progress({
+                text:'loading...'
+            });
+            $.messager.show({
+                title:'提示信息',
+                timeout:2000,
+                msg:'此操作可能执行时间较长,请耐心等待,谢谢。'
+            });
+            $.post("/init/elevator/confirmCoordinateByeddistance1",function(data){
+                $.messager.progress('close');
+                $.messager.alert("信息",data,"info");
+                $(".btn-with:nth-child(11)").css({"opacity":"1","z-index":"1"});
+            });
+        }
+        function confirmCoordinateBybd() {
+            $.messager.progress({
+                text:'loading...'
+            });
+            $.messager.show({
+                title:'提示信息',
+                timeout:2000,
+                msg:'此操作可能执行时间较长,请耐心等待,谢谢。'
+            });
+            $.post("/init/elevator/confirmCoordinateBybd",function(data){
+                $.messager.progress('close');
+                $.messager.alert("信息",data,"info");
+            });
+        }
+
+    </script>
+</head>
+
+<body class="easyui-layout" data-options="fit:true">
+
+
+    <!--<div region="north" style="width:100%;height: 150px">
+        <div class="input-div">
+            <form>
+                <input type="radio" name="adminFlag" value="0" >系统无法定位电梯</input>
+                <input type="radio" name="adminFlag" value="1">根据百度定位电梯</input>
+                <input type="submit" value="人工操作">  </input>
+            </form>
+        </div>
+
+    </div>-->
+    <div region="north" style="width:100%;height: 300px">
+
+        <div>
+            <a id="init" href="#" class="easyui-linkbutton btn-with1" onclick="init()">初始化(<span style="color: red;font-size: large">第一次操作请进行初始化,此操作将会还原之前操作！！！</span>)</a>
+        </div>
+        <div >
+
+                <a id="updateCoordinate" href="#" class="easyui-linkbutton btn-with" onclick="updateCoordinate()">自动生成坐标</a>
+                <a id="checkCoordinate0" href="#" class="easyui-linkbutton btn-with" onclick="checkCoordinate0()">检验电梯库坐标有效性</a>
+                <a id="checkCoordinate1" href="#" class="easyui-linkbutton btn-with" onclick="checkCoordinate1()">检验粘贴库坐标有效性</a>
+                <a id="checkCoordinate2" href="#" class="easyui-linkbutton btn-with" onclick="checkCoordinate2()">检验96933库坐标有效性</a>
+                <a id="confirmCoordinateByAll" href="#" class="easyui-linkbutton btn-with" onclick="confirmCoordinateByAll()">根据三个坐标误差200m以内定位</a>
+                <a href="#" class="easyui-linkbutton btn-with" onclick="confirmCoordinateBypddistance()">根据96933坐标与粘贴坐标误差250m以内定位</a>
+                <a href="#" class="easyui-linkbutton btn-with" onclick="confirmCoordinateByepdistance()">根据96933坐标与电梯坐标误差250m以内定位</a>
+
+
+            <a href="#" class="easyui-linkbutton btn-with" onclick="confirmCoordinateByeddistance()">根据粘贴坐标与电梯坐标误差500m以内定位</a>
+            <a href="#" class="easyui-linkbutton btn-with" onclick="confirmCoordinateByepdistance1()">根据96933坐标与电梯坐标误差1000m以内定位</a>
+            <a href="#" class="easyui-linkbutton btn-with" onclick="confirmCoordinateByeddistance1()">根据粘贴坐标与电梯坐标误差1000m以内定位</a>
+            <a href="#" class="easyui-linkbutton btn-with" onclick="confirmCoordinateBybd()">根据百度坐标定位</a>
+        </div>
+
+    </div>
+
+    <!--<div region="center" style="width:100%;height: 100px;">
+        <div style="width:100%;height: 100px;">
+                <div>
+                    <a href="/init/elevatorCoordinate.html"><input type="button" class="btn" value="人工坐标定位" onmouseover="this.style.backgroundPosition='left -36px'"
+                           onmouseout="this.style.backgroundPosition='left top'" /></a>
+                    <span style="color: #b92c28;font-size: large">注意：请确保以上操作全部完成之后再进行人工操作</span>
+                </div>
+        </div>
+    </div>-->
+
+
+
+
+</body>
+</html>
