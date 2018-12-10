@@ -4,10 +4,12 @@ import com.zytx.init.domain.ElevatorCoordinate;
 import com.zytx.init.domain.ElevatorInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Mapper
+@Repository
 public interface ElevatorMapper {
 
     List<ElevatorInfo> findCantConfirmByCoordinate(@Param("start") int start,@Param("end") int end);
