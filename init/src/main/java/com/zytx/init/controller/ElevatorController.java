@@ -4,6 +4,7 @@ package com.zytx.init.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.zytx.init.domain.ElevatorCoordinate;
 import com.zytx.init.domain.ElevatorInfo;
+import com.zytx.init.exception.NetWorkException;
 import com.zytx.init.service.ElevatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +38,9 @@ public class ElevatorController {
         try {
             elevatorService.updateCoordinate();
             return "更新成功";
+        } catch (NetWorkException nete) {
+            nete.printStackTrace();
+            return "网络不畅通！请联系管理员检查网络！";
         } catch (Exception e) {
             e.printStackTrace();
             return "可能在更新过程中出现问题,请与管理员联系检查问题!";
@@ -50,6 +54,9 @@ public class ElevatorController {
         try {
             elevatorService.cheeckCoordinate(sign);
             return "检验完成";
+        } catch (NetWorkException nete) {
+            nete.printStackTrace();
+            return "网络不畅通！请联系管理员检查网络！";
         } catch (Exception e) {
             e.printStackTrace();
             return "可能在更新过程中出现问题,请与管理员联系检查问题!";
@@ -166,6 +173,9 @@ public class ElevatorController {
         try {
             elevatorService.updateCoordinateNoRewrite();
             return "更新成功";
+        } catch (NetWorkException nete) {
+            nete.printStackTrace();
+            return "网络不畅通！请联系管理员检查网络！";
         } catch (Exception e) {
             e.printStackTrace();
             return "可能在更新过程中出现问题,请与管理员联系检查问题!";
