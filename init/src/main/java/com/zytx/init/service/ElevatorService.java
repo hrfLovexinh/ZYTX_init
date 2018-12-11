@@ -250,8 +250,25 @@ public class ElevatorService {
             }
         }catch(Exception e) {
             //e.printStackTrace();
-            System.out.println("开启自调");
-            return parseAddressByCoordinate(map_X,map_Y);
+            //System.out.println("开启自调");
+            if(isConnect()) {
+                return parseAddressByCoordinate(map_X,map_Y);
+            } else {
+                System.out.println("延时10s");
+                try
+                {
+                    Thread.currentThread().sleep(10000);//毫秒
+                }
+                catch(Exception ex){
+                    System.out.println("线程睡眠异常");
+                }
+                if(isConnect()) {
+                    return parseAddressByCoordinate(map_X,map_Y);
+                } else {
+                    //Exception exception = new NetWorkException("gbg");
+                    throw new NetWorkException("网络不畅通！请联系管理员检查网络！");
+                }
+            }
         }
 
 	   /* if(status.equals(0)){
