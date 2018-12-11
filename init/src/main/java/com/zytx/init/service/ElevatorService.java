@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.ConnectException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,7 +96,8 @@ public class ElevatorService {
                 if(isConnect()) {
                     getCoordinateBybd(item);
                 } else {
-                    throw new NetWorkException();
+                    //Exception exception = new NetWorkException("gbg");
+                    throw new NetWorkException("网络不畅通！请联系管理员检查网络！");
                 }
             }
 
