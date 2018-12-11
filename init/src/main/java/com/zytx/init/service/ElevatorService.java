@@ -4,11 +4,16 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zytx.init.domain.ElevatorCoordinate;
 import com.zytx.init.domain.ElevatorInfo;
+import com.zytx.init.exception.NetWorkException;
 import com.zytx.init.mapper.ElevatorMapper;
 import com.zytx.init.utils.OkHttpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,8 +80,25 @@ public class ElevatorService {
 			item.setMap_Y("0.000000");
 			item.setPrecise("0");
 			ElevaltorInfo.updateAll(ElevaltorInfo.class, "map_X=?,map_Y=?,precise=?", new Object[]{item.getMap_X(),item.getMap_Y(),item.getPrecise()}, "id=?", new Object[]{item.getId()});*/
-            System.out.println("启用自调");
-            getCoordinateBybd(item);
+            //System.out.println("启用自调");
+            if(isConnect()) {
+                getCoordinateBybd(item);
+            } else {
+                System.out.println("延时10s");
+                try
+                {
+                    Thread.currentThread().sleep(10000);//毫秒
+                }
+                catch(Exception ex){
+                    System.out.println("线程睡眠异常");
+                }
+                if(isConnect()) {
+                    getCoordinateBybd(item);
+                } else {
+                    throw new NetWorkException();
+                }
+            }
+
         }
     }
 
@@ -283,5 +305,41 @@ public class ElevatorService {
                 getCoordinateBybd(item);
             }
         }
+    }
+
+    //判断网络是否联通
+    public boolean isConnect(){
+        boolean connect = false;
+        Runtime runtime = Runtime.getRuntime();
+        Process process;
+        try {
+            process = runtime.exec("ping " + "www.baidu.com");
+            InputStream is = process.getInputStream();
+            InputStreamReader isr = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(isr);
+            String line = null;
+            StringBuffer sb = new StringBuffer();
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+            System.out.println("返回值为:"+sb);
+            is.close();
+            isr.close();
+            br.close();
+
+            if (null != sb && !sb.toString().equals("")) {
+                String logString = "";
+                if (sb.toString().indexOf("TTL") > 0) {
+                    // 网络畅通
+                    connect = true;
+                } else {
+                    // 网络不畅通
+                    connect = false;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return connect;
     }
 }
