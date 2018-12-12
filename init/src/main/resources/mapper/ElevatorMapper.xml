@@ -108,11 +108,11 @@
     </update>
 
     <select id="confirmCoordinateBybdCount" resultType="long">
-        select count(*) from TwoCodeElevatorInfo where (dealCoordinate=0 or dealCoordinate is null) and LEFT(map_X,1)!='0' and LEFT(map_Y,1)!='0' and precise is not null
+        select count(*) from TwoCodeElevatorInfo where (dealCoordinate=0 or dealCoordinate is null) and LEFT(map_X,1)!='0' and LEFT(map_Y,1)!='0'/* and precise is not null*/
     </select>
 
     <select id="confirmCoordinateBybd" resultType="elevatorInfo">
-        select * from( select ROW_NUMBER() over(order by ID)TT,Tb.* FROM (select id,map_X,map_Y from TwoCodeElevatorInfo where (dealCoordinate=0 or dealCoordinate is null) and LEFT(map_X,1)!='0' and LEFT(map_Y,1)!='0'and precise is not null) Tb)TTT WHERE TTT.TT between #{start} and #{end}
+        select * from( select ROW_NUMBER() over(order by ID)TT,Tb.* FROM (select id,map_X,map_Y from TwoCodeElevatorInfo where (dealCoordinate=0 or dealCoordinate is null) and LEFT(map_X,1)!='0' and LEFT(map_Y,1)!='0'/* and precise is not null*/) Tb)TTT WHERE TTT.TT between #{start} and #{end}
     </select>
 
     <update id="updateConfirmCoordinateBybd">
